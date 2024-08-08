@@ -1,0 +1,144 @@
+#Lab9
+
+
+create database real_Estate;
+
+CREATE TABLE OWNER(
+    ID INT PRIMARY KEY ,
+    NAME VARCHAR(20) NOT NULL ,
+    EMAIL VARCHAR(40) NOT NULL UNIQUE ,
+    PHONE_NUMBER VARCHAR(10) NOT NULL UNIQUE ,
+    ADDRESS VARCHAR(40) NOT NULL
+);
+
+CREATE TABLE BROKER(
+    ID INT PRIMARY KEY ,
+    NAME VARCHAR(20) NOT NULL ,
+    EMAIL VARCHAR(40) NOT NULL UNIQUE ,
+    PHONE_NUMBER VARCHAR(10) NOT NULL UNIQUE ,
+    AGENCY_NAME VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE TENANT(
+    ID INT PRIMARY KEY ,
+    NAME VARCHAR(20) NOT NULL ,
+    EMAIL VARCHAR(40) NOT NULL UNIQUE ,
+    PHONE_NUMBER VARCHAR(10) NOT NULL UNIQUE ,
+    LEASE_START_DATE DATE NOT NULL ,
+    LEASE_END_DATE DATE NOT NULL
+);
+
+
+CREATE TABLE PROPERTY(
+    ID INT PRIMARY KEY ,
+    TYPE VARCHAR(10) NOT NULL CHECK ( TYPE IN ('house' , 'apartment')),
+    ADDRESS VARCHAR(40) NOT NULL ,
+    PRICE DOUBLE NOT NULL DEFAULT 0,
+    Status_Available BOOLEAN DEFAULT TRUE,
+    OWNER_ID INT,
+    FOREIGN KEY (OWNER_ID)REFERENCES OWNER(ID),
+    BROKER_ID INT,
+    FOREIGN KEY (BROKER_ID) REFERENCES BROKER(ID)
+);
+
+CREATE TABLE LEASE(
+    ID INT PRIMARY KEY ,
+    LEASE_START_DATE DATE NOT NULL DEFAULT CURRENT_DATE,
+    LEASE_END_DATE DATE NOT NULL CHECK ( LEASE_START_DATE < LEASE_END_DATE ),
+    MONTHLY_RENT DOUBLE NOT NULL ,
+    TENANT_ID INT,
+    FOREIGN KEY (TENANT_ID) REFERENCES TENANT(ID),
+    BROKER_ID INT,
+    FOREIGN KEY (BROKER_ID) REFERENCES BROKER(ID)
+);
+
+# Insert into OWNER table
+INSERT INTO OWNER (ID, NAME, EMAIL, PHONE_NUMBER, ADDRESS) VALUES
+(1, 'Fahad almusalam', 'fahad@gmail.com', '0553030141', '123 fahad St'),
+(2, 'Ali', 'Ali@gmail.com', '0987654321', '456 Ali St'),
+(3, 'Reem fahad', 'reem@gmail.com', '0551238956', '123 reem St'),
+(4, 'maha', 'maha@gmail.com', '0987654123', '456 maha St');
+
+
+# Insert into BROKER table
+INSERT INTO BROKER (ID, NAME, EMAIL, PHONE_NUMBER, AGENCY_NAME) VALUES
+(1, 'Abdullah', 'abdullah@gmail.com', '1122334455', 'Agency One'),
+(2, 'Saud', 'saud@gmail.com', '5566778899', 'Agency Two'),
+(3, 'sarah', 'sarah@gmail.com', '2211334455', 'Agency three'),
+(4, 'nouf', 'nouf@gmail.com', '6655778899', 'Agency four'),
+;
+
+# Insert into TENANT table
+INSERT INTO TENANT (ID, NAME, EMAIL, PHONE_NUMBER, LEASE_START_DATE, LEASE_END_DATE) VALUES
+(1, 'Abdulrahman', 'abd123@gmail.com', '2233445566', '2025-01-01', '2025-12-31'),
+(2, 'khalid', 'khalid@gmail.com', '6677889900', '2025-02-01', '2025-12-31'),
+(3, 'abdulmalik', 'abdulmalik@gmail.com', '2333445566', '2025-01-01', '2025-12-31'),
+(4, 'mona', 'mona@gmail.com', '6687889900', '2025-02-01', '2025-12-31')
+;
+
+# Insert into PROPERTY table
+INSERT INTO PROPERTY (ID, TYPE, ADDRESS, PRICE, Status_Available, OWNER_ID, BROKER_ID) VALUES
+(1, 'house', '789 Hitten St', 500000, TRUE, 1, 1),
+(2, 'apartment', '101 Malqa St', 300000, FALSE, 2, 2),
+(3, 'house', '456 Qurtupah St', 900000, TRUE, 3, 3),
+(4, 'apartment', '333 narjes St', 400000, TRUE, 4, 4);
+
+# Insert into LEASE table
+INSERT INTO LEASE (ID, LEASE_START_DATE, LEASE_END_DATE, MONTHLY_RENT, TENANT_ID, BROKER_ID) VALUES
+(1, '2025-01-01', '2025-12-31', 1500, 1, 1),
+(2, '2025-02-01', '2025-12-31', 1200, 2, 2);
+
+# Select all from OWNER
+SELECT * FROM OWNER;
+
+# Select all from BROKER
+SELECT * FROM BROKER;
+
+# Select all from TENANT
+SELECT * FROM TENANT;
+
+# Select all from PROPERTY
+SELECT * FROM PROPERTY;
+
+# Select all from LEASE
+SELECT * FROM LEASE;
+
+#Select all monthly_rant
+SELECT LEASE.MONTHLY_RENT from LEASE;
+
+# Update OWNER's address
+UPDATE OWNER SET ADDRESS = '789 King abdullah St' WHERE ID = 1;
+
+# Update BROKER's agency name
+UPDATE BROKER SET AGENCY_NAME = 'New Agency' WHERE ID = 1;
+
+# Update TENANT's lease end date
+UPDATE TENANT SET LEASE_END_DATE = '2025-01-31' WHERE ID = 2;
+
+# Update PROPERTY's price
+UPDATE PROPERTY SET PRICE = 550000 WHERE ID = 1;
+
+# Update LEASE's monthly rent
+UPDATE LEASE SET MONTHLY_RENT = 1600 WHERE ID = 1;
+
+
+# Delete from OWNER
+DELETE FROM OWNER WHERE ID = 2;
+
+# Delete from BROKER
+DELETE FROM BROKER WHERE ID = 2;
+
+# Delete from TENANT
+DELETE FROM TENANT WHERE ID = 1;
+
+# Delete from PROPERTY
+DELETE FROM PROPERTY WHERE ID = 2;
+
+# Delete from LEASE
+DELETE FROM LEASE WHERE ID = 2;
+
+
+
+DELETE FROM OWNER WHERE ID = 1;
+SELECT * FROM PROPERTY WHERE OWNER_ID = 1;
+
